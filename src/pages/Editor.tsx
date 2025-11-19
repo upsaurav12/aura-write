@@ -72,7 +72,7 @@ const Editor = () => {
     ],
     editorProps: {
       attributes: {
-        class: "prose prose-lg dark:prose-invert max-w-none focus:outline-none min-h-[500px] px-8 py-6",
+        class: "prose-editor max-w-none focus:outline-none min-h-[500px] px-12 py-8",
       },
     },
     onUpdate: ({ editor }) => {
@@ -267,27 +267,24 @@ const Editor = () => {
 
   return (
     <div className={`min-h-screen ${isDark ? "dark" : ""}`}>
-      <div className="dark:bg-[#0A0A0A] bg-background min-h-screen">
+      <div className="bg-background min-h-screen transition-colors">
         {/* Top Bar */}
-        <div className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center gap-4">
+            <div className="flex justify-between items-center h-14">
+              <div className="flex items-center gap-3">
                 <RouterLink to="/dashboard">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="h-9">
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back
                   </Button>
                 </RouterLink>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-primary" />
-                  <span className="font-bold hidden sm:inline">BlogAI</span>
-                </div>
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="h-9"
                   onClick={() => setIsPreview(!isPreview)}
                 >
                   {isPreview ? (
@@ -302,12 +299,13 @@ const Editor = () => {
                     </>
                   )}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => setIsDark(!isDark)}>
+                <Button variant="ghost" size="sm" className="h-9" onClick={() => setIsDark(!isDark)}>
                   {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
+                  className="h-9"
                   onClick={() => {
                     saveToLocalStorage(editor.getHTML(), editor.getJSON());
                     toast({
@@ -319,7 +317,7 @@ const Editor = () => {
                   <Save className="h-4 w-4 mr-2" />
                   Save
                 </Button>
-                <Button className="btn-hero" size="sm" onClick={handlePublish}>
+                <Button size="sm" className="h-9 bg-primary text-primary-foreground hover:bg-primary/90" onClick={handlePublish}>
                   Publish
                 </Button>
               </div>
@@ -334,93 +332,97 @@ const Editor = () => {
               {!isPreview && (
                 <>
                   {/* Formatting Toolbar */}
-                  <Card className="p-4 dark:bg-[#1A1A1A] dark:border-[#2A2A2A]">
-                    <div className="flex flex-wrap gap-2">
+                  <Card className="p-3 border-border/50">
+                    <div className="flex flex-wrap gap-1">
                       <Button
-                        variant={editor.isActive("bold") ? "default" : "ghost"}
+                        variant={editor.isActive("bold") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleBold().run()}
                         title="Bold"
                       >
                         <Bold className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant={editor.isActive("italic") ? "default" : "ghost"}
+                        variant={editor.isActive("italic") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleItalic().run()}
                         title="Italic"
                       >
                         <Italic className="h-4 w-4" />
                       </Button>
+                      <Separator orientation="vertical" className="h-6" />
                       <Button
-                        variant={editor.isActive("heading", { level: 1 }) ? "default" : "ghost"}
+                        variant={editor.isActive("heading", { level: 1 }) ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
                         title="Heading 1"
                       >
                         <Heading1 className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant={editor.isActive("heading", { level: 2 }) ? "default" : "ghost"}
+                        variant={editor.isActive("heading", { level: 2 }) ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                         title="Heading 2"
                       >
                         <Heading2 className="h-4 w-4" />
                       </Button>
+                      <Separator orientation="vertical" className="h-6" />
                       <Button
-                        variant={editor.isActive("bulletList") ? "default" : "ghost"}
+                        variant={editor.isActive("bulletList") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleBulletList().run()}
                         title="Bullet List"
                       >
                         <List className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant={editor.isActive("orderedList") ? "default" : "ghost"}
+                        variant={editor.isActive("orderedList") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleOrderedList().run()}
                         title="Numbered List"
                       >
                         <ListOrdered className="h-4 w-4" />
                       </Button>
+                      <Separator orientation="vertical" className="h-6" />
                       <Button
-                        variant={editor.isActive("blockquote") ? "default" : "ghost"}
+                        variant={editor.isActive("blockquote") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleBlockquote().run()}
                         title="Quote"
                       >
                         <Quote className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant={editor.isActive("codeBlock") ? "default" : "ghost"}
+                        variant={editor.isActive("codeBlock") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
                         title="Code Block"
                       >
                         <Code className="h-4 w-4" />
                       </Button>
+                      <Separator orientation="vertical" className="h-6" />
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={addImage}
                         title="Image"
                       >
                         <ImageIcon className="h-4 w-4" />
                       </Button>
                       <Button
-                        variant={editor.isActive("link") ? "default" : "ghost"}
+                        variant={editor.isActive("link") ? "secondary" : "ghost"}
                         size="sm"
-                        className="h-9 w-9 p-0"
+                        className="h-8 w-8 p-0"
                         onClick={setLink}
                         title="Link"
                       >
@@ -430,24 +432,24 @@ const Editor = () => {
                   </Card>
 
                   {/* Title Input */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 px-12">
                     <Input
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="text-4xl font-bold border-none shadow-none px-0 focus-visible:ring-0 dark:bg-transparent dark:text-foreground"
-                      placeholder="Article title..."
+                      className="text-5xl font-display font-bold border-none shadow-none px-0 focus-visible:ring-0 placeholder:text-muted-foreground/40 bg-transparent"
+                      placeholder="Title"
                     />
                   </div>
                 </>
               )}
 
               {/* Editor or Preview */}
-              <Card className="min-h-[600px] dark:bg-[#1A1A1A] dark:border-[#2A2A2A]">
+              <Card className="min-h-[600px] border-border/50">
                 {isPreview ? (
-                  <div className="p-8">
-                    <h1 className="text-4xl font-bold mb-8 dark:text-foreground">{title || "Untitled"}</h1>
+                  <div className="px-12 py-8">
+                    <h1 className="font-display text-5xl font-bold mb-8">{title || "Untitled"}</h1>
                     <div
-                      className="prose prose-lg dark:prose-invert max-w-none"
+                      className="prose-editor max-w-none"
                       dangerouslySetInnerHTML={{ __html: editor.getHTML() }}
                     />
                   </div>
@@ -459,22 +461,22 @@ const Editor = () => {
 
             {/* AI Tools Sidebar */}
             <div className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
-              <Card className="p-6 space-y-4 dark:bg-[#1A1A1A] dark:border-[#2A2A2A]">
+              <Card className="p-5 space-y-4 border-border/50">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  <h3 className="font-semibold dark:text-foreground">AI Tools</h3>
+                  <Sparkles className="h-4 w-4" />
+                  <h3 className="font-semibold text-sm">AI Tools</h3>
                 </div>
-                <Separator className="dark:bg-[#2A2A2A]" />
-                <div className="space-y-2">
+                <Separator />
+                <div className="space-y-1.5">
                   {aiTools.map((tool, index) => (
                     <Button
                       key={index}
-                      variant="outline"
-                      className="w-full justify-start dark:bg-[#0A0A0A] dark:border-[#2A2A2A] dark:hover:bg-[#2A2A2A]"
+                      variant="ghost"
+                      className="w-full justify-start h-9 text-sm"
                       onClick={() => handleAIGenerate(tool.action)}
                       disabled={isGenerating}
                     >
-                      <tool.icon className="h-4 w-4 mr-2" />
+                      <tool.icon className="h-3.5 w-3.5 mr-2" />
                       {tool.label}
                     </Button>
                   ))}
@@ -482,24 +484,24 @@ const Editor = () => {
               </Card>
 
               {/* Stats Card */}
-              <Card className="p-6 space-y-4 dark:bg-[#1A1A1A] dark:border-[#2A2A2A]">
-                <h3 className="font-semibold dark:text-foreground">Document Stats</h3>
-                <div className="space-y-2 text-sm">
+              <Card className="p-5 space-y-4 border-border/50">
+                <h3 className="font-semibold text-sm">Document Stats</h3>
+                <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Words</span>
-                    <span className="font-medium dark:text-foreground">
+                    <span className="font-medium">
                       {editor.state.doc.textContent.split(/\s+/).filter(Boolean).length}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Characters</span>
-                    <span className="font-medium dark:text-foreground">
+                    <span className="font-medium">
                       {editor.state.doc.textContent.length}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Reading time</span>
-                    <span className="font-medium dark:text-foreground">
+                    <span className="font-medium">
                       {Math.ceil(
                         editor.state.doc.textContent.split(/\s+/).filter(Boolean).length / 200
                       )}{" "}
@@ -515,9 +517,9 @@ const Editor = () => {
 
       {/* Link Dialog */}
       <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
-        <DialogContent className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A]">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="dark:text-foreground">Insert Link</DialogTitle>
+            <DialogTitle>Insert Link</DialogTitle>
             <DialogDescription>
               Enter the URL you want to link to
             </DialogDescription>
@@ -526,7 +528,6 @@ const Editor = () => {
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
             placeholder="https://example.com"
-            className="dark:bg-[#0A0A0A] dark:border-[#2A2A2A]"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 saveLink();
